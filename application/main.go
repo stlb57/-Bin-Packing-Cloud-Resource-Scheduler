@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os/exec"
 	"sort"
 )
 
@@ -31,10 +33,27 @@ func ffd(weight []int, c int, n int) int {
 	return len(buckets)
 }
 
+func triggerTerraform(serverCount int) {
+	varFlag := fmt.Sprintf("-var=server_count=%d", serverCount)
+	fmt.Println("Calculated servers:", serverCount)
+	fmt.Println("Triggering terraform...")
+
+	cmd := exec.Command("terraform", "plan", varFlag)
+	output, err := cmd.CombinedOutput()
+
+	fmt.Println(string(output))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 	var weight []int = []int{9, 8, 2, 2, 2, 2}
 	c := 10
 	n := len(weight)
+
 	res := ffd(weight, c, n)
-	fmt.Println(res)
+
+	triggerTerraform(res)
 }
