@@ -4,6 +4,41 @@
 .terraform/
 .terraform.lock.hcl
 
+# Go: build artifacts and binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Build directories
+/bin/
+/build/
+/dist/
+
+# Go modules cache (outside repo but ignore if present)
+/pkg/mod/
+
+# Vendored dependencies
+/vendor/
+
+# Test coverage
+coverage.out
+
 # Environment files
 .env
 .env.*
+
+# IDEs and editors
+.vscode/
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

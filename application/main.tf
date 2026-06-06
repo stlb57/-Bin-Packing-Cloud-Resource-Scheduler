@@ -1,28 +1,23 @@
 terraform {
   required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0.0"
     }
   }
 }
 
-provider "aws" {
-  region = "ap-south-1" 
+provider "docker" {
 }
 
 variable "server_count" {
-  description = "Number of servers dictated by the Go FFD algorithm"
+  description = "Number of worker containers to run"
   type        = number
+  default     = 0
 }
 
-resource "aws_instance" "render_node" {
-  count         = var.server_count
-  ami           = "ami-0287a05f0ef0e9d9a" 
-  instance_type = "t2.micro"              
-  
-  tags = {
-    Name = "Smart-Render-Node-${count.index + 1}"
-    ManagedBy = "Golang-FFD-Scheduler"
-  }
+resource "docker_container" "worker_node" {
+  count = var.server_count 
+  name  = "worker-node-${count.index + 1}"
+  image = "video-worker:v1"
 }
