@@ -3,11 +3,24 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"os/exec"
 	"sort"
+	"time"
 )
 
-func ffd(weight []int, c int, n int) int {
+func ffd(ch chan int, c int) int {
+	n := len(ch)
+	if n == 0 {
+		return 0
+	}
+	weight := make([]int, 0)
+	for range len(ch) {
+		var num int
+		num = <-ch
+		weight = append(weight, num)
+
+	}
 	sort.Slice(weight, func(i, j int) bool {
 		return weight[i] > weight[j]
 	})
@@ -49,11 +62,24 @@ func triggerTerraform(serverCount int) {
 }
 
 func main() {
-	var weight []int = []int{9, 8, 2, 2, 2, 2}
+	ch := make(chan int, 100)
+	rand.Seed(time.Now().UnixNano())
+	go func() {
+
+		for {
+
+			rand_time := rand.Intn(4) + 1
+			time.Sleep(time.Duration(rand_time) * time.Second)
+			rand_weight := rand.Intn(8) + 1
+			ch <- rand_weight
+		}
+	}()
+
+	ticker := time.NewTicker(30 * time.Second)
+	defer ticker.Stop()
 	c := 10
-	n := len(weight)
-
-	res := ffd(weight, c, n)
-
-	triggerTerraform(res)
+	for range ticker.C {
+		res := ffd(ch, c)
+		triggerTerraform(res)
+	}
 }
