@@ -1,6 +1,7 @@
 package main
 
 import (
+	"autoscaler/internal/api"
 	"autoscaler/pkg/provisioner"
 	"autoscaler/pkg/scheduler"
 	"fmt"
@@ -17,16 +18,17 @@ func main() {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt)
 	rand.Seed(time.Now().UnixNano())
-	go func() {
+	// go func() {
 
-		for {
+	// 	for {
 
-			rand_time := rand.Intn(4) + 1
-			time.Sleep(time.Duration(rand_time) * time.Second)
-			rand_weight := rand.Intn(8) + 1
-			ch <- rand_weight
-		}
-	}()
+	// 		rand_time := rand.Intn(4) + 1
+	// 		time.Sleep(time.Duration(rand_time) * time.Second)
+	// 		rand_weight := rand.Intn(8) + 1
+	// 		ch <- rand_weight
+	// 	}
+	// }()
+	go api.StartServer(ch)
 
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
