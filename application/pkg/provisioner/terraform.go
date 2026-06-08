@@ -12,6 +12,7 @@ func TriggerTerraform(serverCount int) {
 	fmt.Println("Triggering terraform...")
 
 	cmd := exec.Command("terraform", "plan", varFlag)
+	//cmd := exec.Command("terraform", "apply", "-auto-approve", varFlag)
 	output, err := cmd.CombinedOutput()
 
 	fmt.Println(string(output))
