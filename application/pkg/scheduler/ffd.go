@@ -4,18 +4,12 @@ import (
 	"sort"
 )
 
-func Ffd(ch chan int, c int) int {
-	n := len(ch)
+func Ffd(weight []int, c int) int {
+	n := len(weight)
 	if n == 0 {
 		return 0
 	}
-	weight := make([]int, 0)
-	for range len(ch) {
-		var num int
-		num = <-ch
-		weight = append(weight, num)
 
-	}
 	sort.Slice(weight, func(i, j int) bool {
 		return weight[i] > weight[j]
 	})
